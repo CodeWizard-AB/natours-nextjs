@@ -4,21 +4,22 @@ import Logo from "@/public/img/logo-white.png";
 import { cookies } from "next/headers";
 import axios from "axios";
 import { User } from "../_utils/interfaces";
+import { logout } from "../_utils/auth";
 
 export default async function Header() {
 	const token = cookies().get("jwt")?.value;
-	let user: User | null;
+	let user: User | null = null;
 
 	if (token) {
-		const {
-			data: {
-				data: { data },
-			},
-		} = await axios(`${process.env.BASE_API_URL}/users/me`, {
-			headers: { Authorization: `Bearer ${token}` },
-		});
-		user = data;
-	} else user = null;
+		try {
+			const { data } = await axios(`${process.env.BASE_API_URL}/users/me`, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
+			user = data.data.data;
+		} catch (error: any) {
+			console.log(error.message);
+		}
+	}
 
 	return (
 		<header className="header">
@@ -33,9 +34,9 @@ export default async function Header() {
 			<nav className="nav nav--user">
 				{user ? (
 					<>
-						<Link className="nav__el nav__el--logout" href="/">
-							Log out
-						</Link>
+						<form className="nav__el nav__el--logout" action={logout}>
+							<button>Log out</button>
+						</form>
 						<Link className="nav__el" href="/me">
 							<Image
 								className="nav__user-img"

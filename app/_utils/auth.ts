@@ -23,3 +23,7 @@ export const signInUser = async (formData: FormData) => {
 		console.log(error.response.data);
 	}
 };
+
+export const logout = () => {
+	cookies().delete("jwt");
+};
