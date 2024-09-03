@@ -1,13 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/public/img/logo-white.png";
+import { cookies } from "next/headers";
+import axios from "axios";
+import { User } from "../_utils/interfaces";
 
-interface User {
-	name: string;
-	photo: string;
-}
+export default async function Header() {
+	const token = cookies().get("jwt")?.value;
+	let user: User | null;
 
-export default function Header({ user }: { user: User }) {
+	if (token) {
+		const {
+			data: {
+				data: { data },
+			},
+		} = await axios(`${process.env.BASE_API_URL}/users/me`, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		user = data;
+	} else user = null;
+
 	return (
 		<header className="header">
 			<nav className="nav nav--tours">
@@ -19,7 +31,7 @@ export default function Header({ user }: { user: User }) {
 				<Image src={Logo} alt="Natours logo" className="w-auto" />
 			</figure>
 			<nav className="nav nav--user">
-				{!user ? (
+				{user ? (
 					<>
 						<Link className="nav__el nav__el--logout" href="/">
 							Log out
