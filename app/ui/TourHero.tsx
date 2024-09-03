@@ -11,8 +11,8 @@ export default function TourHero({ tour }: { tour: Tour }) {
 					className="header__hero-img"
 					src={`/img/tours/${tour.coverImage}`}
 					alt={tour.name}
-					width={100}
-					height={100}
+					width={1200}
+					height={400}
 				/>
 			</div>
 

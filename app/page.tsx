@@ -7,7 +7,9 @@ export default async function Home() {
 		data: {
 			data: { data: tours },
 		},
-	} = await axios("http://localhost:3000/api/v1/tours");
+	} = await axios(`${process.env.BASE_API_URL}/tours`, {
+		withCredentials: true,
+	});
 
 	return (
 		<main className="main">

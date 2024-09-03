@@ -6,6 +6,8 @@ import TourMap from "@/app/ui/TourMap";
 import TourPictures from "@/app/ui/TourPictures";
 import axios from "axios";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 const tourDetail = async (slug: string) => {
 	const {
@@ -34,6 +36,8 @@ export default async function TourDetail({
 }) {
 	const tour = await tourDetail(slug);
 
+	if (!cookies().get("jwt")) redirect("/login");
+
 	return (
 		<>
 			<TourHero tour={tour} />
@@ -42,7 +46,7 @@ export default async function TourDetail({
 
 			<TourPictures tour={tour} />
 
-			<TourMap tour={tour} />
+			{/* <TourMap tour={tour} /> */}
 
 			<ReviewList tour={tour} />
 
