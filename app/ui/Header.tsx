@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/public/img/logo-white.png";
+import { logout } from "@/app/_utils/auth";
 import { cookies } from "next/headers";
-import axios from "axios";
 import { User } from "../_utils/interfaces";
-import { logout } from "../_utils/auth";
+import axios from "axios";
 
 export default async function Header() {
 	const token = cookies().get("jwt")?.value;

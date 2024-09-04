@@ -2,15 +2,12 @@
 
 import axios from "axios";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const signInUser = async (formData: FormData) => {
 	try {
 		const email = formData.get("email");
 		const password = formData.get("password");
-
-		if (!email || !password) {
-			alert("Provide both email and password!");
-		}
 
 		const { data } = await axios.post(
 			`${process.env.BASE_API_URL}/users/login`,
@@ -18,12 +15,14 @@ export const signInUser = async (formData: FormData) => {
 			{ withCredentials: true }
 		);
 
-		cookies().set("jwt", data.token);
+		cookies().set("jwt", data?.token);
+		redirect("/");
 	} catch (error: any) {
-		console.log(error.response.data);
+		console.log(error.message);
 	}
 };
 
 export const logout = () => {
 	cookies().delete("jwt");
+	redirect("/login");
 };
